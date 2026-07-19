@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luna Bistro — Fine Dining Restaurant</title>
+<meta name="description" content="Luna Bistro is a premium fine-dining restaurant offering fresh ingredients, unforgettable flavors and exceptional service. Book your table today.">
+<meta name="keywords" content="luxury restaurant, fine dining, Luna Bistro, book a table, restaurant menu">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --cream:#F7F1E6;
+    --paper:#FBF7EF;
+    --ink:#211712;
+    --espresso:#1B120D;
+    --brown:#6B4226;
+    --brown-deep:#4A2C18;
+    --gold:#C8A24B;
+    --gold-soft:#DCC382;
+    --line: rgba(200,162,75,0.35);
+    --shadow: 0 20px 50px -20px rgba(27,18,13,0.35);
+    --radius: 18px;
+    --ff-display: "Fraunces", serif;
+    --ff-body: "Manrope", sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--ff-body);
+    color:var(--ink);
+    background:var(--cream);
+    overflow-x:hidden;
+    line-height:1.6;
+  }
+  img{max-width:100%;display:block;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  button{font-family:inherit;cursor:pointer;border:none;}
+  .container{
+    width:min(1200px, 92%);
+    margin-inline:auto;
+  }
+  section{position:relative;}
+
+  /* ---------- Crescent signature motif ---------- */
+  .crescent{
+    display:inline-block;
+    width:1em;height:1em;
+    position:relative;
+  }
+  .crescent svg{width:100%;height:100%;display:block;}
+
+  .divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    margin: 0 auto 18px;
+    color:var(--gold);
+  }
+  .divider::before,.divider::after{
+    content:"";
+    height:1px;width:48px;
+    background:linear-gradient(90deg, transparent, var(--gold));
+  }
+  .divider::after{background:linear-gradient(90deg, var(--gold), transparent);}
+
+  .eyebrow{
+    font-family:var(--ff-body);
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    font-size:.72rem;
+    font-weight:700;
+    color:var(--brown);
+  }
+
+  h1,h2,h3,h4{
+    font-family:var(--ff-display);
+    font-weight:500;
+    color:var(--espresso);
+    line-height:1.12;
+  }
+
+  .section-head{
+    text-align:center;
+    max-width:640px;
+    margin:0 auto 56px;
+  }
+  .section-head h2{
+    font-size:clamp(2rem, 4vw, 2.9rem);
+    margin-top:10px;
+  }
+  .section-head p{
+    margin-top:14px;
+    color:#5a4a3d;
+    font-size:1.02rem;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:16px 34px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:.92rem;
+    letter-spacing:.03em;
+    transition:transform .35s ease, box-shadow .35s ease, background .35s ease, color .35s ease;
+  }
+  .btn-gold{
+    background:linear-gradient(135deg, var(--gold-soft), var(--gold));
+    color:var(--espresso);
+    box-shadow: 0 14px 30px -10px rgba(200,162,75,0.55);
+  }
+  .btn-gold:hover{transform:translateY(-3px);box-shadow:0 20px 36px -12px rgba(200,162,75,0.7);}
+  .btn-outline{
+    border:1.5px solid rgba(247,241,230,0.7);
+    color:var(--paper);
+    background:transparent;
+  }
+  .btn-outline:hover{background:rgba(247,241,230,0.12);transform:translateY(-3px);}
+  .btn-outline.dark{border-color:var(--brown);color:var(--brown-deep);}
+  .btn-outline.dark:hover{background:rgba(107,66,38,0.08);}
+
+  /* ---------- Loader ---------- */
+  #loader{
+    position:fixed;inset:0;z-index:9999;
+    background:var(--espresso);
+    display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;
+    transition:opacity .7s ease, visibility .7s ease;
+  }
+  #loader .crescent{width:52px;height:52px;color:var(--gold);animation:spin 1.8s linear infinite;}
+  #loader span{
+    font-family:var(--ff-display);
+    color:var(--paper);
+    letter-spacing:.28em;
+    font-size:.8rem;
+    text-transform:uppercase;
+  }
+  @keyframes spin{
+    0%{transform:rotate(0deg) scale(1);}
+    50%{transform:rotate(180deg) scale(1.15);}
+    100%{transform:rotate(360deg) scale(1);}
+  }
+  #loader.hide{opacity:0;visibility:hidden;}
+
+  /* ---------- Navbar ---------- */
+  header{
+    position:fixed;top:0;left:0;width:100%;
+    z-index:900;
+    padding:22px 0;
+    transition:background .4s ease, padding .4s ease, box-shadow .4s ease;
+  }
+  header.scrolled{
+    background:rgba(27,18,13,0.92);
+    padding:12px 0;
+    box-shadow:0 10px 30px -10px rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+  }
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--ff-display);
+    font-size:1.35rem;
+    color:var(--paper);
+    letter-spacing:.02em;
+  }
+  .logo .crescent{color:var(--gold);width:22px;height:22px;}
+  .nav-links{
+    display:flex;gap:34px;
+  }
+  .nav-links a{
+    color:rgba(247,241,230,0.88);
+    font-size:.88rem;
+    font-weight:500;
+    letter-spacing:.02em;
+    position:relative;
+    padding-bottom:4px;
+  }
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:0;
+    width:0;height:1px;background:var(--gold);
+    transition:width .3s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{display:flex;align-items:center;gap:18px;}
+  .nav-cta .btn{padding:11px 24px;font-size:.82rem;}
+  .burger{
+    display:none;
+    flex-direction:column;gap:5px;
+    background:none;
+  }
+  .burger span{width:26px;height:2px;background:var(--paper);border-radius:2px;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;align-items:center;
+    position:relative;
+    background:
+      linear-gradient(180deg, rgba(20,13,9,0.55) 0%, rgba(20,13,9,0.35) 40%, rgba(15,10,7,0.85) 100%),
+      url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat fixed;
+  }
+  .hero-content{
+    max-width:720px;
+    padding-top:90px;
+  }
+  .hero .eyebrow{color:var(--gold-soft);}
+  .hero h1{
+    color:var(--paper);
+    font-size:clamp(2.6rem, 6vw, 4.6rem);
+    margin-top:16px;
+    font-weight:500;
+  }
+  .hero h1 em{font-style:italic;color:var(--gold-soft);}
+  .hero p{
+    color:rgba(247,241,230,0.82);
+    font-size:1.12rem;
+    max-width:520px;
+    margin-top:22px;
+  }
+  .hero-buttons{
+    display:flex;gap:18px;flex-wrap:wrap;
+    margin-top:44px;
+  }
+  .scroll-cue{
+    position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    color:var(--gold-soft);
+    animation:bob 2.4s ease-in-out infinite;
+  }
+  .scroll-cue .line{width:1px;height:40px;background:linear-gradient(180deg, var(--gold-soft), transparent);}
+  @keyframes bob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,10px);}}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0;transform:translateY(36px);transition:opacity .9s ease, transform .9s ease;}
+  .reveal.show{opacity:1;transform:translateY(0);}
+
+  /* ---------- About ---------- */
+  .about{padding:130px 0;background:var(--paper);}
+  .about-grid{
+    display:grid;grid-template-columns:0.85fr 1.15fr;gap:70px;align-items:center;
+  }
+  .about-img-wrap{position:relative;}
+  .about-img-wrap img{
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    width:100%;
+    aspect-ratio:4/5;object-fit:cover;
+  }
+  .about-badge{
+    position:absolute;bottom:-26px;right:-26px;
+    background:var(--espresso);
+    color:var(--paper);
+    border-radius:50%;
+    width:130px;height:130px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;
+    box-shadow:var(--shadow);
+    border:1px solid var(--line);
+  }
+  .about-badge strong{font-family:var(--ff-display);font-size:1.5rem;color:var(--gold);}
+  .about-badge span{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;margin-top:4px;color:rgba(247,241,230,0.8);}
+
+  .about-text h2{font-size:clamp(2rem,4vw,2.7rem);margin-top:10px;}
+  .about-text p{margin-top:20px;color:#5a4a3d;}
+  .stats{
+    display:flex;gap:40px;margin-top:44px;flex-wrap:wrap;
+  }
+  .stat strong{
+    font-family:var(--ff-display);
+    font-size:2.1rem;color:var(--brown-deep);display:block;
+  }
+  .stat span{font-size:.78rem;letter-spacing:.06em;color:#7a6a5a;text-transform:uppercase;}
+
+  /* ---------- Menu ---------- */
+  .menu{padding:130px 0;background:var(--cream);}
+  .menu-tabs{
+    display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
+    margin-bottom:56px;
+  }
+  .menu-tab{
+    padding:10px 22px;border-radius:999px;
+    background:transparent;border:1px solid var(--line);
+    color:var(--brown-deep);font-size:.85rem;font-weight:600;
+    transition:all .3s ease;
+  }
+  .menu-tab.active, .menu-tab:hover{
+    background:var(--espresso);color:var(--gold-soft);border-color:var(--espresso);
+  }
+  .menu-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:28px;
+  }
+  .menu-panel{display:none;}
+  .menu-panel.active{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .food-card{
+    position:relative;
+    background:rgba(255,255,255,0.55);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,0.6);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:0 16px 40px -22px rgba(27,18,13,0.35);
+    transition:transform .45s ease, box-shadow .45s ease;
+  }
+  .food-card:hover{transform:translateY(-8px);box-shadow:0 26px 50px -20px rgba(27,18,13,0.4);}
+  .food-card .img-wrap{height:220px;overflow:hidden;}
+  .food-card img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease;}
+  .food-card:hover img{transform:scale(1.08);}
+  .food-card-body{padding:22px 24px 26px;}
+  .food-card-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+  .food-card-top h4{font-size:1.15rem;}
+  .food-card-top .price{font-family:var(--ff-display);color:var(--brown-deep);font-weight:600;}
+  .food-card p{margin-top:8px;font-size:.88rem;color:#7a6a5a;}
+  .food-card::before{
+    content:"";position:absolute;top:14px;right:14px;
+    width:26px;height:26px;
+    background:radial-gradient(circle at 65% 35%, transparent 55%, var(--gold) 56%);
+    border-radius:50%;opacity:.85;
+  }
+
+  /* ---------- Why choose ---------- */
+  .why{padding:130px 0;background:var(--espresso);color:var(--paper);}
+  .why .section-head p{color:rgba(247,241,230,0.7);}
+  .why .eyebrow{color:var(--gold-soft);}
+  .why-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:26px;
+  }
+  .why-card{
+    padding:38px 26px;
+    border:1px solid rgba(247,241,230,0.14);
+    border-radius:var(--radius);
+    text-align:center;
+    transition:transform .4s ease, background .4s ease, border-color .4s ease;
+  }
+  .why-card:hover{transform:translateY(-8px);background:rgba(247,241,230,0.05);border-color:var(--gold);}
+  .why-card i{font-size:1.7rem;color:var(--gold);margin-bottom:18px;}
+  .why-card h4{color:var(--paper);font-size:1.08rem;}
+  .why-card p{margin-top:10px;font-size:.86rem;color:rgba(247,241,230,0.65);}
+
+  /* ---------- Gallery ---------- */
+  .gallery{padding:130px 0;background:var(--paper);}
+  .gallery-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:220px;gap:18px;
+  }
+  .gallery-grid .g-item:nth-child(1){grid-row:span 2;}
+  .gallery-grid .g-item:nth-child(4){grid-row:span 2;}
+  .g-item{border-radius:var(--radius);overflow:hidden;position:relative;box-shadow:var(--shadow);}
+  .g-item img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease;}
+  .g-item:hover img{transform:scale(1.12);}
+  .g-item::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, transparent 55%, rgba(20,13,9,0.55));
+    opacity:0;transition:opacity .4s ease;
+  }
+  .g-item:hover::after{opacity:1;}
+
+  /* ---------- Testimonials ---------- */
+  .testimonials{padding:130px 0;background:var(--cream);}
+  .t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .t-card{
+    background:var(--paper);border-radius:var(--radius);
+    padding:32px 28px;box-shadow:var(--shadow);
+    border:1px solid var(--line);
+  }
+  .t-stars{color:var(--gold);font-size:.85rem;margin-bottom:14px;}
+  .t-card p{color:#5a4a3d;font-size:.94rem;}
+  .t-person{display:flex;align-items:center;gap:12px;margin-top:22px;}
+  .t-avatar{
+    width:44px;height:44px;border-radius:50%;
+    background:linear-gradient(135deg, var(--gold-soft), var(--brown));
+    display:flex;align-items:center;justify-content:center;
+    color:var(--paper);font-family:var(--ff-display);font-weight:600;
+  }
+  .t-person strong{display:block;font-size:.9rem;}
+  .t-person span{font-size:.76rem;color:#8a7a6a;}
+
+  /* ---------- Reservation ---------- */
+  .reservation{
+    padding:130px 0;
+    background:linear-gradient(160deg, var(--espresso), #241811 70%);
+    color:var(--paper);
+    position:relative;
+    overflow:hidden;
+  }
+  .reservation::before{
+    content:"";position:absolute;width:520px;height:520px;
+    border:1px solid rgba(200,162,75,0.15);border-radius:50%;
+    top:-260px;right:-160px;
+  }
+  .res-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:70px;align-items:center;}
+  .res-info .eyebrow{color:var(--gold-soft);}
+  .res-info h2{color:var(--paper);font-size:clamp(2rem,4vw,2.6rem);margin-top:10px;}
+  .res-info p{color:rgba(247,241,230,0.7);margin-top:18px;}
+  .res-info ul{margin-top:30px;display:flex;flex-direction:column;gap:14px;}
+  .res-info ul li{display:flex;gap:12px;align-items:center;color:rgba(247,241,230,0.85);font-size:.92rem;}
+  .res-info ul i{color:var(--gold);}
+
+  form.booking{
+    background:rgba(247,241,230,0.06);
+    border:1px solid rgba(247,241,230,0.14);
+    border-radius:var(--radius);
+    padding:40px;
+    backdrop-filter:blur(10px);
+  }
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+  .field{display:flex;flex-direction:column;gap:8px;}
+  .field label{font-size:.76rem;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-soft);}
+  .field input, .field select{
+    background:rgba(247,241,230,0.08);
+    border:1px solid rgba(247,241,230,0.18);
+    border-radius:10px;
+    padding:13px 16px;
+    color:var(--paper);
+    font-family:inherit;font-size:.92rem;
+  }
+  .field input::placeholder{color:rgba(247,241,230,0.4);}
+  .field input:focus, .field select:focus{outline:none;border-color:var(--gold);}
+  form.booking .btn{width:100%;justify-content:center;margin-top:8px;}
+  .form-msg{margin-top:16px;font-size:.85rem;color:var(--gold-soft);display:none;}
+  .form-msg.show{display:block;}
+
+  /* ---------- Contact ---------- */
+  .contact{padding:130px 0;background:var(--paper);}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:stretch;}
+  .contact-info{display:flex;flex-direction:column;gap:22px;justify-content:center;}
+  .contact-item{display:flex;gap:16px;align-items:flex-start;}
+  .contact-item i{
+    width:44px;height:44px;border-radius:50%;
+    background:var(--espresso);color:var(--gold);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .contact-item strong{display:block;font-size:.95rem;color:var(--espresso);}
+  .contact-item span{font-size:.88rem;color:#7a6a5a;}
+  .social-row{display:flex;gap:12px;margin-top:10px;}
+  .social-row a{
+    width:42px;height:42px;border-radius:50%;
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--brown-deep);
+    transition:all .3s ease;
+  }
+  .social-row a:hover{background:var(--espresso);color:var(--gold);border-color:var(--espresso);}
+  .map-wrap{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);min-height:340px;}
+  .map-wrap iframe{width:100%;height:100%;min-height:340px;border:0;filter:grayscale(0.3) sepia(0.15);}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--espresso);color:rgba(247,241,230,0.75);padding:80px 0 30px;}
+  .footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.2fr;gap:40px;}
+  .footer-logo{display:flex;align-items:center;gap:10px;font-family:var(--ff-display);font-size:1.3rem;color:var(--paper);}
+  .footer-logo .crescent{color:var(--gold);width:20px;height:20px;}
+  .footer-col p{margin-top:16px;font-size:.88rem;line-height:1.7;}
+  .footer-col h4{color:var(--paper);font-size:.95rem;margin-bottom:18px;letter-spacing:.02em;}
+  .footer-col ul li{margin-bottom:10px;font-size:.88rem;}
+  .footer-col ul li a:hover{color:var(--gold);}
+  .newsletter-row{display:flex;margin-top:6px;border:1px solid rgba(247,241,230,0.2);border-radius:999px;overflow:hidden;}
+  .newsletter-row input{
+    flex:1;background:transparent;border:none;padding:12px 18px;color:var(--paper);font-family:inherit;font-size:.85rem;
+  }
+  .newsletter-row input:focus{outline:none;}
+  .newsletter-row button{
+    background:var(--gold);color:var(--espresso);padding:0 20px;font-weight:700;font-size:.9rem;
+  }
+  .footer-bottom{
+    margin-top:60px;padding-top:26px;border-top:1px solid rgba(247,241,230,0.12);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.8rem;
+  }
+
+  /* ---------- Back to top ---------- */
+  #toTop{
+    position:fixed;bottom:30px;right:30px;z-index:500;
+    width:50px;height:50px;border-radius:50%;
+    background:var(--espresso);color:var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow);
+    opacity:0;pointer-events:none;transform:translateY(12px);
+    transition:opacity .35s ease, transform .35s ease;
+  }
+  #toTop.show{opacity:1;pointer-events:auto;transform:translateY(0);}
+  #toTop:hover{background:var(--gold);color:var(--espresso);}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 980px){
+    .about-grid, .res-grid, .contact-grid{grid-template-columns:1fr;}
+    .about-img-wrap{max-width:420px;margin:0 auto;}
+    .why-grid{grid-template-columns:repeat(2,1fr);}
+    .menu-grid, .menu-panel.active{grid-template-columns:repeat(2,1fr);}
+    .t-grid{grid-template-columns:repeat(2,1fr);}
+    .footer-grid{grid-template-columns:repeat(2,1fr);}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .gallery-grid .g-item:nth-child(1),.gallery-grid .g-item:nth-child(4){grid-row:span 1;}
+  }
+  @media (max-width: 700px){
+    .nav-links, .nav-cta .btn-outline{display:none;}
+    .burger{display:flex;}
+    .hero{background-attachment:scroll;}
+    .why-grid{grid-template-columns:1fr;}
+    .menu-grid, .menu-panel.active{grid-template-columns:1fr;}
+    .t-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr;}
+    .gallery-grid{grid-template-columns:1fr;}
+    .form-row{grid-template-columns:1fr;}
+    .about-badge{width:105px;height:105px;bottom:-18px;right:-14px;}
+    .hero-buttons{flex-direction:column;align-items:flex-start;}
+  }
+
+  .mobile-menu{
+    position:fixed;top:0;right:-100%;width:78%;max-width:340px;height:100vh;
+    background:var(--espresso);z-index:1000;padding:36px 30px;
+    transition:right .45s ease;
+    display:flex;flex-direction:column;gap:26px;
+  }
+  .mobile-menu.open{right:0;}
+  .mobile-menu a{color:var(--paper);font-size:1.05rem;}
+  .mobile-menu .close-m{align-self:flex-end;color:var(--gold);font-size:1.4rem;background:none;}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <span class="crescent">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M14.5 2.5c-5.2 1-9 5.6-9 11S9.3 24 14.5 24 c-5.4-2.2-8.6-6.7-8.6-11.5S9.1 4.7 14.5 2.5z" fill="currentColor"/></svg>
+  </span>
+  <span>Luna Bistro</span>
+</div>
+
+<header id="siteHeader">
+  <div class="container">
+    <nav>
+      <a href="#hero" class="logo">
+        <span class="crescent"><svg viewBox="0 0 24 24" fill="none"><path d="M14.5 2.5c-5.2 1-9 5.6-9 11S9.3 24 14.5 24 c-5.4-2.2-8.6-6.7-8.6-11.5S9.1 4.7 14.5 2.5z" fill="currentColor"/></svg></span>
+        Luna Bistro
+      </a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#menu">Menu</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#reservation">Reservation</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-cta">
+        <a href="#reservation" class="btn btn-outline">Book a Table</a>
+        <button class="burger" id="burgerBtn" aria-label="Open menu"><span></span><span></span><span></span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="close-m" id="closeMenu">&times;</button>
+  <a href="#about">About</a>
+  <a href="#menu">Menu</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#testimonials">Testimonials</a>
+  <a href="#reservation">Reservation</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-content">
+      <span class="eyebrow">Luna Bistro · Est. 2009</span>
+      <h1>Experience <em>Fine Dining</em> Like Never Before</h1>
+      <p>Fresh ingredients, unforgettable flavors, and exceptional service — a table under the moonlight, crafted for you.</p>
+      <div class="hero-buttons">
+        <a href="#reservation" class="btn btn-gold"><i class="fa-regular fa-calendar"></i> Book a Table</a>
+        <a href="#menu" class="btn btn-outline"><i class="fa-solid fa-book-open"></i> View Menu</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="line"></span><i class="fa-solid fa-chevron-down"></i></div>
+</section>
+
+<section class="about" id="about">
+  <div class="container about-grid">
+    <div class="about-img-wrap reveal">
+      <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=900&auto=format&fit=crop" alt="Head chef of Luna Bistro plating a dish">
+      <div class="about-badge"><strong>4.9★</strong><span>Guest Rating</span></div>
+    </div>
+    <div class="about-text reveal">
+      <span class="eyebrow">Our Story</span>
+      <h2>A Table Set Under the Moon</h2>
+      <p>Luna Bistro began as a single candlelit room and a chef who believed dinner should feel like an occasion. Today, we source the morning's best produce, age our own meats, and pair every plate with a wine chosen just for it. Every evening at Luna is built around one idea: slow down, and taste something remarkable.</p>
+      <p>From our open kitchen to the last pour of dessert wine, our team treats every guest like the only reservation of the night.</p>
+      <div class="stats">
+        <div class="stat"><strong>15+</strong><span>Years Experience</span></div>
+        <div class="stat"><strong>20,000+</strong><span>Happy Guests</span></div>
+        <div class="stat"><strong>4.9★</strong><span>Average Rating</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="divider"><span class="crescent"><svg viewBox="0 0 24 24" fill="none"><path d="M14.5 2.5c-5.2 1-9 5.6-9 11S9.3 24 14.5 24 c-5.4-2.2-8.6-6.7-8.6-11.5S9.1 4.7 14.5 2.5z" fill="currentColor"/></svg></span></div>
+      <span class="eyebrow">Signature Menu</span>
+      <h2>Crafted Plates, Honest Ingredients</h2>
+      <p>A curated selection from our kitchen — each dish built around the season's finest.</p>
+    </div>
+
+    <div class="menu-tabs">
+      <button class="menu-tab active" data-tab="steak">Steak</button>
+      <button class="menu-tab" data-tab="pasta">Pasta</button>
+      <button class="menu-tab" data-tab="seafood">Seafood</button>
+      <button class="menu-tab" data-tab="pizza">Pizza</button>
+      <button class="menu-tab" data-tab="desserts">Desserts</button>
+      <button class="menu-tab" data-tab="drinks">Drinks</button>
+    </div>
+
+    <div class="menu-panel active" id="steak">
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1542365887-1149961dccc7?q=80&w=800&auto=format&fit=crop" alt="Grilled ribeye steak"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Ribeye Reserve</h4><span class="price">$48</span></div><p>Dry-aged ribeye, roasted bone marrow, red wine jus.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=800&auto=format&fit=crop" alt="Filet mignon steak"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Filet Mignon</h4><span class="price">$52</span></div><p>Herb-butter filet, truffle mash, charred asparagus.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop" alt="Tomahawk steak"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Tomahawk to Share</h4><span class="price">$96</span></div><p>32oz bone-in ribeye, rosemary salt, smoked butter.</p></div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="pasta">
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1579631542720-3a87824fff86?q=80&w=800&auto=format&fit=crop" alt="Truffle tagliatelle pasta"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Truffle Tagliatelle</h4><span class="price">$32</span></div><p>Hand-cut pasta, black truffle, aged parmesan.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1608219992759-8d74ed8d76eb?q=80&w=800&auto=format&fit=crop" alt="Lobster ravioli"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Lobster Ravioli</h4><span class="price">$36</span></div><p>Butter-poached lobster, saffron cream, chives.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1622973536968-3ead9e780960?q=80&w=800&auto=format&fit=crop" alt="Classic spaghetti"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Spaghetti Pomodoro</h4><span class="price">$24</span></div><p>San Marzano tomato, basil, extra virgin olive oil.</p></div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="seafood">
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1559847844-5315695dadae?q=80&w=800&auto=format&fit=crop" alt="Grilled salmon seafood dish"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Miso Glazed Salmon</h4><span class="price">$34</span></div><p>Wild salmon, charred bok choy, ginger broth.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1625943553852-781c6dd46faa?q=80&w=800&auto=format&fit=crop" alt="Seared scallops"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Seared Scallops</h4><span class="price">$38</span></div><p>Cauliflower puree, brown butter, crisp pancetta.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1604909052868-dd2ef1e53daa?q=80&w=800&auto=format&fit=crop" alt="Whole grilled fish"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Branzino al Sale</h4><span class="price">$42</span></div><p>Salt-baked whole fish, citrus, herb oil.</p></div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="pizza">
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop" alt="Margherita pizza"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Margherita</h4><span class="price">$21</span></div><p>San Marzano, fior di latte, torn basil.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?q=80&w=800&auto=format&fit=crop" alt="Truffle mushroom pizza"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Truffle Mushroom</h4><span class="price">$27</span></div><p>Wild mushroom, fontina, truffle oil.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?q=80&w=800&auto=format&fit=crop" alt="Prosciutto pizza"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Prosciutto e Rucola</h4><span class="price">$25</span></div><p>San Daniele prosciutto, arugula, shaved parmesan.</p></div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="desserts">
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=800&auto=format&fit=crop" alt="Chocolate lava cake dessert"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Molten Chocolate</h4><span class="price">$14</span></div><p>Dark chocolate lava cake, vanilla bean ice cream.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1524351199678-941a58a3df50?q=80&w=800&auto=format&fit=crop" alt="Creme brulee dessert"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Crème Brûlée</h4><span class="price">$12</span></div><p>Madagascar vanilla custard, caramelized sugar crust.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?q=80&w=800&auto=format&fit=crop" alt="Tiramisu dessert"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Tiramisu</h4><span class="price">$13</span></div><p>Espresso-soaked ladyfingers, mascarpone cream.</p></div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="drinks">
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?q=80&w=800&auto=format&fit=crop" alt="Signature cocktail drink"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Luna Old Fashioned</h4><span class="price">$16</span></div><p>Bourbon, orange bitters, smoked sugar cube.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1560508180-03f285f67ded?q=80&w=800&auto=format&fit=crop" alt="Glass of red wine"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Reserve Red Wine</h4><span class="price">$18</span></div><p>Hand-picked cabernet from our private cellar.</p></div>
+      </div>
+      <div class="food-card reveal">
+        <div class="img-wrap"><img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?q=80&w=800&auto=format&fit=crop" alt="Espresso martini cocktail"></div>
+        <div class="food-card-body"><div class="food-card-top"><h4>Espresso Martini</h4><span class="price">$15</span></div><p>Vodka, fresh espresso, coffee liqueur.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Why Choose Us</span>
+      <h2>What Makes Luna Different</h2>
+      <p>Every detail, from ingredient to atmosphere, is chosen with intention.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal"><i class="fa-solid fa-leaf"></i><h4>Fresh Ingredients</h4><p>Sourced daily from local farms and trusted purveyors.</p></div>
+      <div class="why-card reveal"><i class="fa-solid fa-award"></i><h4>Award Winning Chef</h4><p>Led by a chef recognized across the region's top kitchens.</p></div>
+      <div class="why-card reveal"><i class="fa-solid fa-champagne-glasses"></i><h4>Luxury Atmosphere</h4><p>Warm lighting, curated music, and an unhurried pace.</p></div>
+      <div class="why-card reveal"><i class="fa-solid fa-bell-concierge"></i><h4>Fast Service</h4><p>Attentive staff trained to anticipate every need.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Gallery</span>
+      <h2>A Glimpse Inside Luna</h2>
+      <p>Moments from our dining room, kitchen, and table.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="g-item reveal"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=900&auto=format&fit=crop" alt="Luna Bistro dining room"></div>
+      <div class="g-item reveal"><img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?q=80&w=700&auto=format&fit=crop" alt="Plated fine dining dish"></div>
+      <div class="g-item reveal"><img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=700&auto=format&fit=crop" alt="Restaurant table setting"></div>
+      <div class="g-item reveal"><img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?q=80&w=900&auto=format&fit=crop" alt="Chef preparing food in kitchen"></div>
+      <div class="g-item reveal"><img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?q=80&w=700&auto=format&fit=crop" alt="Bar and drinks area"></div>
+      <div class="g-item reveal"><img src="https://images.unsplash.com/photo-1428515613728-6b4607e44363?q=80&w=700&auto=format&fit=crop" alt="Elegant dessert plating"></div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Testimonials</span>
+      <h2>What Our Guests Say</h2>
+      <p>Six stories from tables we've had the pleasure of serving.</p>
+    </div>
+    <div class="t-grid">
+      <div class="t-card reveal"><div class="t-stars">★★★★★</div><p>"Best anniversary dinner we've ever had. The steak was cooked perfectly and the service never felt rushed."</p><div class="t-person"><div class="t-avatar">S</div><div><strong>Sarah M.</strong><span>Regular Guest</span></div></div></div>
+      <div class="t-card reveal"><div class="t-stars">★★★★★</div><p>"Every dish felt intentional. The truffle tagliatelle alone is worth the visit — we'll be back monthly."</p><div class="t-person"><div class="t-avatar">D</div><div><strong>David K.</strong><span>Food Blogger</span></div></div></div>
+      <div class="t-card reveal"><div class="t-stars">★★★★★</div><p>"Luna is our go-to for client dinners. The atmosphere alone closes half the deal before dessert."</p><div class="t-person"><div class="t-avatar">A</div><div><strong>Amara O.</strong><span>Business Owner</span></div></div></div>
+      <div class="t-card reveal"><div class="t-stars">★★★★★</div><p>"From the moment we walked in, the staff made us feel like the only table in the room."</p><div class="t-person"><div class="t-avatar">J</div><div><strong>James T.</strong><span>First-time Guest</span></div></div></div>
+      <div class="t-card reveal"><div class="t-stars">★★★★★</div><p>"The wine pairing suggestions were spot on. A genuinely thoughtful, unpretentious fine dining experience."</p><div class="t-person"><div class="t-avatar">R</div><div><strong>Riya P.</strong><span>Sommelier Enthusiast</span></div></div></div>
+      <div class="t-card reveal"><div class="t-stars">★★★★★</div><p>"We booked for a birthday and left already planning the next visit. Impeccable from start to finish."</p><div class="t-person"><div class="t-avatar">M</div><div><strong>Marcus L.</strong><span>Loyal Guest</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="reservation" id="reservation">
+  <div class="container res-grid">
+    <div class="res-info reveal">
+      <span class="eyebrow">Reservation</span>
+      <h2>Reserve Your Evening</h2>
+      <p>Tell us when you'd like to join us, and we'll have your table waiting under the Luna glow.</p>
+      <ul>
+        <li><i class="fa-regular fa-clock"></i> Open daily, 5:00 PM – 11:00 PM</li>
+        <li><i class="fa-solid fa-users"></i> Private dining available for groups of 8+</li>
+        <li><i class="fa-solid fa-phone"></i> Prefer to call? (555) 234-7890</li>
+      </ul>
+    </div>
+    <form class="booking reveal" id="bookingForm">
+      <div class="form-row">
+        <div class="field"><label>Full Name</label><input type="text" placeholder="Your name" required></div>
+        <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" required></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Phone</label><input type="tel" placeholder="+1 (555) 000-0000" required></div>
+        <div class="field"><label>Guests</label>
+          <select required>
+            <option value="">Select</option>
+            <option>1 Guest</option><option>2 Guests</option><option>3 Guests</option><option>4 Guests</option><option>5+ Guests</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Date</label><input type="date" required></div>
+        <div class="field"><label>Time</label><input type="time" required></div>
+      </div>
+      <button type="submit" class="btn btn-gold"><i class="fa-regular fa-calendar-check"></i> Confirm Reservation</button>
+      <p class="form-msg" id="formMsg">Thank you — your reservation request has been received. We'll confirm shortly by email.</p>
+    </form>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container contact-grid">
+    <div class="contact-info reveal">
+      <span class="eyebrow">Contact</span>
+      <h2>Find Us</h2>
+      <div class="contact-item"><i class="fa-solid fa-location-dot"></i><div><strong>Address</strong><span>128 Moonlight Avenue, Downtown District</span></div></div>
+      <div class="contact-item"><i class="fa-solid fa-phone"></i><div><strong>Phone</strong><span>(555) 234-7890</span></div></div>
+      <div class="contact-item"><i class="fa-solid fa-envelope"></i><div><strong>Email</strong><span>hello@lunabistro.com</span></div></div>
+      <div class="social-row">
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      </div>
+    </div>
+    <div class="map-wrap reveal">
+      <iframe src="https://www.google.com/maps?q=New%20York%2C%20NY&output=embed" loading="lazy" allowfullscreen title="Luna Bistro location map"></iframe>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-grid">
+    <div class="footer-col">
+      <div class="footer-logo"><span class="crescent"><svg viewBox="0 0 24 24" fill="none"><path d="M14.5 2.5c-5.2 1-9 5.6-9 11S9.3 24 14.5 24 c-5.4-2.2-8.6-6.7-8.6-11.5S9.1 4.7 14.5 2.5z" fill="currentColor"/></svg></span>Luna Bistro</div>
+      <p>Fine dining crafted with fresh ingredients, honest technique, and warm hospitality — every single night.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#reservation">Reservation</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Opening Hours</h4>
+      <ul>
+        <li>Mon – Thu: 5PM – 10PM</li>
+        <li>Fri – Sat: 5PM – 11PM</li>
+        <li>Sunday: 4PM – 9PM</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Newsletter</h4>
+      <p>Get seasonal menus and exclusive offers.</p>
+      <div class="newsletter-row">
+        <input type="email" placeholder="Your email">
+        <button id="subscribeBtn">Join</button>
+      </div>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© 2026 Luna Bistro. All rights reserved.</span>
+    <span>Designed for a luxury dining experience.</span>
+  </div>
+</footer>
+
+<button id="toTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+<script>
+  // Loader
+  window.addEventListener('load', () => {
+    setTimeout(()=> document.getElementById('loader').classList.add('hide'), 500);
+  });
+
+  // Sticky header
+  const header = document.getElementById('siteHeader');
+  const toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 60){ header.classList.add('scrolled'); toTop.classList.add('show'); }
+    else { header.classList.remove('scrolled'); toTop.classList.remove('show'); }
+  });
+  toTop.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+  // Mobile menu
+  const burger = document.getElementById('burgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const closeMenu = document.getElementById('closeMenu');
+  burger.addEventListener('click', ()=> mobileMenu.classList.add('open'));
+  closeMenu.addEventListener('click', ()=> mobileMenu.classList.remove('open'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=> mobileMenu.classList.remove('open')));
+
+  // Menu tabs
+  const tabs = document.querySelectorAll('.menu-tab');
+  const panels = document.querySelectorAll('.menu-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t=>t.classList.remove('active'));
+      panels.forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); } });
+  }, {threshold:0.15});
+  revealEls.forEach(el=> io.observe(el));
+
+  // Booking form
+  document.getElementById('bookingForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    document.getElementById('formMsg').classList.add('show');
+    this.reset();
+  });
+
+  // Newsletter
+  document.getElementById('subscribeBtn').addEventListener('click', function(e){
+    e.preventDefault();
+    const input = this.previousElementSibling;
+    if(input.value){ input.placeholder = "Subscribed! ✓"; input.value=""; }
+  });
+</script>
+</body>
+</html>
